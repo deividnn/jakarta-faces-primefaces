@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<faces-config xmlns="https://jakarta.ee/xml/ns/jakartaee"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee
+                                  https://jakarta.ee/xml/ns/jakartaee/faces-config_4_0.xsd"
+              version="4.0">
+
+    <!--
+        Elemento <faces-config> é a raiz do arquivo de configuração JSF.
+        Define o namespace, esquema XML e a versão da especificação utilizada.
+        Aqui estamos usando Jakarta Faces 4.0, compatível com Jakarta EE 11.
+    -->
+
+   
+
+</faces-config>

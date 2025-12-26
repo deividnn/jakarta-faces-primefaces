@@ -1,0 +1,10 @@
+/target/
+/analise/
+/.idea/
+qodana.yaml
+/.settings/
+/.mvn/
+/.metadata/
+.classpath
+.factorypath
+.project
