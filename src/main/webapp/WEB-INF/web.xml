@@ -59,13 +59,6 @@
         <param-value>true</param-value>
     </context-param>
 
-    <!-- Localidade padrão da aplicação -->
-    <context-param>
-        <param-name>LOCALE</param-name>
-        <param-value>pt-BR</param-value>
-    </context-param>
-
-
     
     <!-- Ativa a validação no lado do cliente (JavaScript) -->
     <context-param>

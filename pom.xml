@@ -19,10 +19,17 @@
         <jakarta.faces.version>4.1.4</jakarta.faces.version>
         <weld.servlet.version>6.0.3.Final</weld.servlet.version>
         <primefaces.version>15.0.10</primefaces.version>
-         <lombok.version>1.18.42</lombok.version>
+        <lombok.version>1.18.42</lombok.version>
+        <h2.version>2.4.240</h2.version>
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>${h2.version}</version>
+        </dependency>
+        
         <!-- API do Jakarta EE 10 Web Profile - Fornecida pelo Tomcat -->
         <dependency>
             <groupId>jakarta.platform</groupId>

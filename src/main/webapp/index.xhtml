@@ -1,16 +1,140 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="jakarta.faces.html"
-      xmlns:p="primefaces"
-      xmlns:f="jakarta.faces.core">
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces">
 
-    <f:view contentType="text/html;charset=UTF-8" encoding="UTF-8">
-        <h:head>
+    <h:head>
+        <title>Gerenciador de Tasks</title>
+        <style>
+            body {
+                background-color: #f4f4f4;
+                font-family: Arial, sans-serif;
+            }
+            .card {
+                background: white;
+                padding: 20px;
+                border-radius: 8px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+                margin: 20px;
+            }
+        </style>
+    </h:head>
 
-        </h:head>
-        <h:body>
-            <p:textEditor secure="false"/>
-        </h:body>
-    </f:view>
+    <h:body>
+        <div class="card">
+            <h:form id="form">
+                <p:growl id="messages" showDetail="true" />
 
+                <p:toolbar>
+                    <p:toolbarGroup>
+                        <p:commandButton value="Nova Task" icon="pi pi-plus" 
+                                         actionListener="#{taskController.novaTask}"
+                                         update=":dialogs:manage-content" 
+                                         oncomplete="PF('dialogTask').show()"
+                                         styleClass="ui-button-success" style="margin-right: .5rem" />
+                    </p:toolbarGroup>
+                </p:toolbar>
+
+                <p:dataTable id="dt-tasks" widgetVar="dtTasks" var="task" 
+                             value="#{taskController.tasks}"
+                             reflow="true" styleClass="products-table"
+                             paginator="true" rows="5" paginatorPosition="bottom"
+                             rowKey="#{task.id}">
+
+                    <f:facet name="header">
+                        <div class="products-table-header">
+                            <span style="font-weight: bold">LISTA DE TAREFAS</span>
+                            <span class="filter-container ui-input-icon-left" style="float: right;">
+                                <i class="pi pi-search"></i>
+                                <p:inputText id="globalFilter" onkeyup="PF('dtTasks').filter()" placeholder="Pesquisar..." />
+                            </span>
+                        </div>
+                    </f:facet>
+
+                    <p:column headerText="ID" sortBy="#{task.id}" filterBy="#{task.id}" style="width: 50px;">
+                        <h:outputText value="#{task.id}" />
+                    </p:column>
+
+                    <p:column headerText="Título" sortBy="#{task.titulo}" filterBy="#{task.titulo}">
+                        <h:outputText value="#{task.titulo}" />
+                    </p:column>
+
+                    <p:column headerText="Status" sortBy="#{task.status}" filterBy="#{task.status}">
+                        <p:tag value="#{task.status}" 
+                               severity="#{task.status eq 'Concluido' ? 'success' : (task.status eq 'Em Andamento' ? 'warning' : 'info')}" />
+                    </p:column>
+
+                    <p:column headerText="Prazo" sortBy="#{task.dataPrazo}">
+                        <h:outputText value="#{task.dataPrazo}">
+                            <f:convertDateTime type="localDate" pattern="dd/MM/yyyy" />
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column exportable="false" ariaHeaderText="Ações">
+                        <p:commandButton icon="pi pi-pencil" update=":dialogs:manage-content"
+                                         oncomplete="PF('dialogTask').show()"
+                                         styleClass="edit-button rounded-button ui-button-success" process="@this">
+                            <f:setPropertyActionListener value="#{task}" target="#{taskController.taskSelecionada}" />
+                        </p:commandButton>
+
+                        <p:commandButton class="ui-button-warning rounded-button" icon="pi pi-trash" process="@this"
+                                         oncomplete="PF('deleteDialog').show()" style="margin-left: 10px;">
+                            <f:setPropertyActionListener value="#{task}" target="#{taskController.taskSelecionada}" />
+                        </p:commandButton>
+                    </p:column>
+
+                </p:dataTable>
+            </h:form>
+
+            <h:form id="dialogs">
+                <p:dialog header="Detalhes da Task" showEffect="fade" modal="true" widgetVar="dialogTask" responsive="true">
+                    <p:outputPanel id="manage-content" class="ui-fluid">
+                        <p:outputPanel rendered="#{not empty taskController.taskSelecionada}">
+
+                            <div class="field">
+                                <p:outputLabel for="titulo">Título</p:outputLabel>
+                                <p:inputText id="titulo" value="#{taskController.taskSelecionada.titulo}" required="true" />
+                            </div>
+
+                            <div class="field" style="margin-top: 10px;">
+                                <p:outputLabel for="descricao">Descrição</p:outputLabel>
+                                <p:inputTextarea id="descricao" value="#{taskController.taskSelecionada.descricao}" />
+                            </div>
+
+                            <div class="field" style="margin-top: 10px;">
+                                <p:outputLabel for="status">Status</p:outputLabel>
+                                <p:selectOneMenu id="status" value="#{taskController.taskSelecionada.status}">
+                                    <f:selectItem itemLabel="Pendente" itemValue="Pendente"/>
+                                    <f:selectItem itemLabel="Em Andamento" itemValue="Em Andamento"/>
+                                    <f:selectItem itemLabel="Concluido" itemValue="Concluido"/>
+                                </p:selectOneMenu>
+                            </div>
+
+                            <div class="field" style="margin-top: 10px;">
+                                <p:outputLabel for="prazo">Prazo</p:outputLabel>
+                                <p:datePicker id="prazo" value="#{taskController.taskSelecionada.dataPrazo}" showIcon="true" />
+                            </div>
+
+                        </p:outputPanel>
+                    </p:outputPanel>
+
+                    <f:facet name="footer">
+                        <p:commandButton value="Salvar" icon="pi pi-check" actionListener="#{taskController.salvarTask}"
+                                         update="manage-content form:dt-tasks" process="manage-content @this" />
+                        <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('dialogTask').hide()"
+                                         class="ui-button-secondary" type="button" />
+                    </f:facet>
+                </p:dialog>
+
+                <p:confirmDialog widgetVar="deleteDialog" showEffect="fade" width="300"
+                                 message="Deseja excluir esta task?" header="Confirmar" severity="warn">
+                    <p:commandButton value="Sim" icon="pi pi-check" actionListener="#{taskController.removerTask}"
+                                     process="@this" oncomplete="PF('deleteDialog').hide()" />
+                    <p:commandButton value="Não" type="button" styleClass="ui-button-secondary" icon="pi pi-times"
+                                     onclick="PF('deleteDialog').hide()" />
+                </p:confirmDialog>
+            </h:form>
+        </div>
+    </h:body>
 </html>
