@@ -13,6 +13,7 @@ import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,16 +23,21 @@ import org.primefaces.PrimeFaces;
 @ViewScoped
 public class TaskController implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     @Inject
     private TaskService service;
 
     @Getter
     @Setter
-    private List<Task> tasks;
+    private ArrayList<Task> tasks;
 
     @Getter
     @Setter
     private Task taskSelecionada;
+
+    @Inject
+    private transient FacesContext facesContext;
 
     @PostConstruct
     public void init() {
@@ -46,7 +52,7 @@ public class TaskController implements Serializable {
     public void salvarTask() {
         service.salvar(taskSelecionada);
         this.tasks = service.listarTodas(); // Atualiza a lista
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Sucesso", "Task salva!"));
+        facesContext.addMessage(null, new FacesMessage("Sucesso", "Task salva!"));
         PrimeFaces.current().executeScript("PF('dialogTask').hide()");
         PrimeFaces.current().ajax().update("form:dt-tasks", "form:messages");
     }
@@ -54,7 +60,7 @@ public class TaskController implements Serializable {
     public void removerTask() {
         service.deletar(taskSelecionada.getId());
         this.tasks = service.listarTodas();
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Removido", "Task excluída."));
+        facesContext.addMessage(null, new FacesMessage("Removido", "Task excluída."));
         PrimeFaces.current().ajax().update("form:dt-tasks", "form:messages");
     }
 }

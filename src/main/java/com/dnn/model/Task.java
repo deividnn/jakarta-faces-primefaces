@@ -15,6 +15,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Task implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     private Long id;
     private String titulo;
     private String descricao;

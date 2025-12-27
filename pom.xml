@@ -87,7 +87,7 @@
                     <source>${maven.compiler.source}</source>
                     <target>${maven.compiler.target}</target>
                     <compilerArgs>
-                        <arg>-Xlint</arg>
+                      <arg>-Xlint:all,-processing</arg>
                     </compilerArgs>
                 </configuration>
             </plugin>

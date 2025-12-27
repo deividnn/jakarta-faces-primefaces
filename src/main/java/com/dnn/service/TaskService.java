@@ -8,6 +8,7 @@ import com.dnn.model.Task;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Named;
+import java.io.Serializable;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -15,8 +16,9 @@ import java.util.List;
 
 @Named
 @ApplicationScoped
-public class TaskService {
+public class TaskService implements Serializable { // Adicione implements Serializable
 
+    private static final long serialVersionUID = 1L;
     // URL do H2 em Memória (os dados somem ao reiniciar o Tomcat)
     private static final String JDBC_URL = "jdbc:h2:file:/data/tasksdb;DB_CLOSE_DELAY=-1;AUTO_SERVER=TRUE";
     private static final String USER = "sa";
@@ -53,8 +55,8 @@ public class TaskService {
         return DriverManager.getConnection(JDBC_URL, USER, PASSWORD);
     }
 
-    public List<Task> listarTodas() {
-        List<Task> lista = new ArrayList<>();
+    public ArrayList<Task> listarTodas() {
+        ArrayList<Task> lista = new ArrayList<>();
         String sql = "SELECT * FROM task ORDER BY id DESC";
         try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
             ResultSet rs = ps.executeQuery();
