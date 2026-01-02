@@ -14,3 +14,13 @@ As versões foram definidas no `pom.xml` e `Dockerfile`:
 * **Jakarta Faces (JSF):** 4.1.4 (Implementação Mojarra)
 * **PrimeFaces:** 15.0.10 (Tema Saga)
 * **CDI Provider:** Weld Servlet 6.0.3.Final
+
+## 📚 Documentação e Manuais
+
+Links para a documentação oficial das principais tecnologias utilizadas:
+
+* **[PrimeFaces 15 Documentation](https://www.primefaces.org/showcase/)** - Showcase e documentação de componentes
+* **[Apache Tomcat 11 Documentation](https://tomcat.apache.org/tomcat-11.0-doc/index.html)** - Manual oficial do Tomcat 11
+* **[Jakarta Faces 4.1 Specification](https://jakarta.ee/specifications/faces/4.1/)** - Especificação Jakarta Faces 4.1
+* **[JDK 21 Documentation](https://docs.oracle.com/en/java/javase/21/)** - Documentação oficial do Java SE 21
+* **[H2 Database Documentation](https://www.h2database.com/html/main.html)** - Manual de referência do H2
